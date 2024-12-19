@@ -108,3 +108,23 @@ class Client:
     @phone.setter
     def phone(self, value):
         self.__phone = value
+
+class ShortClient:
+    def __init__(self, base_client):
+        if not isinstance(base_client, Client):
+            raise ValueError("Expected an instance of Client.")
+        self._base = base_client
+
+    @property
+    def surname(self):
+        return self._base.surname
+
+    @property
+    def name(self):
+        return self._base.name
+
+    def __str__(self):
+        return f"{self.name} {self.surname}"
+
+    def __repr__(self):
+        return f"ShortClient({self.name} {self.surname})"

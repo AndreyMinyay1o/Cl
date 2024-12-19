@@ -1,3 +1,7 @@
+from datetime import datetime
+import re
+import json
+
 class Client:
 
     def __init__(self, surname, name, patronymic, address, phone):
@@ -16,6 +20,32 @@ class Client:
         if regex and not re.match(regex, value):
             raise ValueError(f"{field_name} is invalid. Expected format: {regex}")
         return value
+
+     @classmethod
+    def from_string(cls, data_string, delimiter=","):
+        fields = data_string.split(delimiter)
+        if len(fields) != 5:
+            raise ValueError("Data string must contain exactly 5 fields separated by the delimiter.")
+        return cls(*[field.strip() for field in fields])
+
+    @classmethod
+    def from_json(cls, json_string):
+        try:
+            data = json.loads(json_string)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid JSON: {e}")
+
+        required_keys = ["surname", "name", "patronymic", "address", "phone"]
+        if not all(key in data for key in required_keys):
+            raise ValueError(f"JSON must contain the following keys: {', '.join(required_keys)}")
+
+        return cls(
+            surname=data["surname"],
+            name=data["name"],
+            patronymic=data["patronymic"],
+            address=data["address"],
+            phone=data["phone"]
+        )
 
     @property
     def surname(self):

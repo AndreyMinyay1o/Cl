@@ -47,6 +47,28 @@ class Client:
             phone=data["phone"]
         )
 
+ def __str__(self):
+        return (
+            f"Full Details:\n"
+            f"surname: {self.surname}\n"
+            f"name: {self.name}\n"
+            f"patronymic: {self.patronymic}\n"
+            f"address: {self.address}\n"
+            f"phone: {self.phone}"
+        )
+
+    def __repr__(self):
+        return f"Client({self.name} {self.surname})"
+
+    def __eq__(self, other):
+        if not isinstance(other, Client):
+            return NotImplemented
+        return (self.surname == other.surname and
+                self.name == other.name and
+                self.patronymic == other.patronymic and
+                self.address == other.address and
+                self.phone == other.phone)
+        
     @property
     def surname(self):
         return self.__surname
